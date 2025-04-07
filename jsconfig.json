@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "jsx": "react-jsx",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "baseUrl": "."
+  },
+  "include": ["./**/*.d.ts", "./**/*.js", "./**/*.jsx"]
+}
