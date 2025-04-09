@@ -68,6 +68,15 @@ const ChartDataTable = ({ chartData, title, isVisible, onClose, onSaveData }) =>
     onClose();
   };
   
+  const handleResetChanges = () => {
+    // Reset the editable data to original chart data
+    if (chartData) {
+      setEditableData([...chartData]);
+      setModifiedIndices([]);
+      setHasChanges(false);
+    }
+  };
+  
   const handleOutsideClick = (e) => {
     // Close the panel if clicking on the dark overlay
     if (e.target.classList.contains('overlay-background')) {
@@ -95,6 +104,9 @@ const ChartDataTable = ({ chartData, title, isVisible, onClose, onSaveData }) =>
     return `${x},${y}`;
   }).join(' ');
   
+  // Calculate height for the action bar
+  const actionBarHeight = 60;
+  
   return (
     <>
       {/* Dark overlay */}
@@ -106,193 +118,220 @@ const ChartDataTable = ({ chartData, title, isVisible, onClose, onSaveData }) =>
         ></div>
       )}
       
-      {/* Panel */}
+      {/* Panel container - fixed position */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 bg-white border-t-2 border-blue-500 shadow-lg transition-transform duration-300 transform ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
-        style={{ zIndex: 40, maxHeight: '80vh', overflowY: 'auto' }}
+        className={`fixed bottom-0 left-0 right-0 transition-transform duration-300 transform ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+        style={{ zIndex: 40, maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}
       >
-        <div className="max-w-4xl mx-auto p-5">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-bold text-blue-700">{title}</h3>
-            <button 
-              onClick={onClose}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
-              aria-label="Close data table"
-            >
-              ×
-            </button>
-          </div>
-          
-          {/* Chart Preview */}
-          <div className="mb-6 w-full" ref={chartContainerRef}>
-            <svg width={chartWidth} height={height} className="bg-white rounded-md shadow border border-gray-100">
-              <line
-                x1={padding.left - 5}
-                y1={height - padding.bottom}
-                x2={chartWidth - padding.right + 2}
-                y2={height - padding.bottom}
-                stroke="#d1d5db"
-                strokeWidth="1"
-              />
-              
-              <line
-                x1={padding.left - 2}
-                y1={getY(max)}
-                x2={chartWidth - padding.right}
-                y2={getY(max)}
-                stroke="#e5e7eb"
-                strokeWidth="1"
-                strokeDasharray="2,2"
-              />
-              
-              <line
-                x1={padding.left - 2}
-                y1={getY(min)}
-                x2={chartWidth - padding.right}
-                y2={getY(min)}
-                stroke="#e5e7eb"
-                strokeWidth="1"
-                strokeDasharray="2,2"
-              />
-              
-              <polyline
-                fill="none"
-                stroke="#3B82F6"
-                strokeWidth="2.5"
-                points={points}
-              />
-              
-              {editableData.map((point, index) => (
-                <circle
-                  key={`point-${index}`}
-                  cx={padding.left + (index / (editableData.length - 1)) * graphWidth}
-                  cy={getY(point.value)}
-                  r="4"
-                  fill={modifiedIndices.includes(index) ? "#F97316" : "#3B82F6"}
-                  stroke="#fff"
-                  strokeWidth="1.5"
+        {/* Scrollable content area */}
+        <div 
+          className="flex-1 overflow-y-auto bg-white border-t-2 border-blue-500"
+          style={{ maxHeight: `calc(80vh - ${actionBarHeight}px)` }}
+        >
+          <div className="max-w-4xl mx-auto p-5">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-blue-700">{title}</h3>
+              <button 
+                onClick={onClose}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full w-8 h-8 flex items-center justify-center"
+                aria-label="Close data table"
+              >
+                ×
+              </button>
+            </div>
+            
+            {/* Chart Preview */}
+            <div className="mb-6 w-full" ref={chartContainerRef}>
+              <svg width={chartWidth} height={height} className="bg-white rounded-md shadow border border-gray-100">
+                <line
+                  x1={padding.left - 5}
+                  y1={height - padding.bottom}
+                  x2={chartWidth - padding.right + 2}
+                  y2={height - padding.bottom}
+                  stroke="#d1d5db"
+                  strokeWidth="1"
                 />
-              ))}
-              
-              {editableData.map((point, index) => {
-                const shouldShowLabel = true;
                 
-                if (shouldShowLabel) {
-                  return (
-                    <text
-                      key={`label-${index}`}
-                      x={padding.left + (index / (editableData.length - 1)) * graphWidth}
-                      y={height - padding.bottom + 20}
-                      fontSize="11"
-                      fill="#6b7280"
-                      textAnchor="middle"
-                    >
-                      {point.period}
-                    </text>
-                  );
-                }
-                return null;
-              })}
-              
-              <text
-                x={padding.left - 10}
-                y={getY(max) + 4}
-                fontSize="11"
-                fill="#6b7280"
-                textAnchor="end"
-              >
-                {max}
-              </text>
-              
-              <text
-                x={padding.left - 10}
-                y={getY(min) + 4}
-                fontSize="11"
-                fill="#6b7280"
-                textAnchor="end"
-              >
-                {min}
-              </text>
-              
-              {/* Add Y-axis label */}
-              <text
-                transform={`rotate(-90, ${padding.left - 35}, ${height/2})`}
-                x={padding.left - 35}
-                y={height/2}
-                fontSize="12"
-                fill="#6b7280"
-                textAnchor="middle"
-              >
-                Value
-              </text>
-              
-              {/* Add horizontal grid lines for better readability */}
-              {[0.25, 0.5, 0.75].map((ratio, idx) => {
-                const value = min + range * ratio;
-                return (
-                  <g key={`grid-${idx}`}>
-                    <line
-                      x1={padding.left - 2}
-                      y1={getY(value)}
-                      x2={chartWidth - padding.right}
-                      y2={getY(value)}
-                      stroke="#e5e7eb"
-                      strokeWidth="1"
-                      strokeDasharray="2,2"
-                    />
-                    <text
-                      x={padding.left - 10}
-                      y={getY(value) + 4}
-                      fontSize="11"
-                      fill="#6b7280"
-                      textAnchor="end"
-                    >
-                      {Math.round(value)}
-                    </text>
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="py-2 px-4 border-b text-left">Period</th>
-                  <th className="py-2 px-4 border-b text-right">Value</th>
-                </tr>
-              </thead>
-              <tbody>
-                {editableData.map((dataPoint, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                    <td className="py-2 px-4 border-b">{dataPoint.period}</td>
-                    <td className="py-2 px-4 border-b text-right">
-                      <input
-                        type="number"
-                        value={dataPoint.value}
-                        onChange={(e) => handleValueChange(index, e.target.value)}
-                        className={`w-20 text-right font-medium p-1 border rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
-                          modifiedIndices.includes(index) ? 'border-orange-500 text-orange-600' : 'border-gray-200'
-                        }`}
-                      />
-                    </td>
-                  </tr>
+                <line
+                  x1={padding.left - 2}
+                  y1={getY(max)}
+                  x2={chartWidth - padding.right}
+                  y2={getY(max)}
+                  stroke="#e5e7eb"
+                  strokeWidth="1"
+                  strokeDasharray="2,2"
+                />
+                
+                <line
+                  x1={padding.left - 2}
+                  y1={getY(min)}
+                  x2={chartWidth - padding.right}
+                  y2={getY(min)}
+                  stroke="#e5e7eb"
+                  strokeWidth="1"
+                  strokeDasharray="2,2"
+                />
+                
+                <polyline
+                  fill="none"
+                  stroke="#3B82F6"
+                  strokeWidth="2.5"
+                  points={points}
+                />
+                
+                {editableData.map((point, index) => (
+                  <circle
+                    key={`point-${index}`}
+                    cx={padding.left + (index / (editableData.length - 1)) * graphWidth}
+                    cy={getY(point.value)}
+                    r="4"
+                    fill={modifiedIndices.includes(index) ? "#F97316" : "#3B82F6"}
+                    stroke="#fff"
+                    strokeWidth="1.5"
+                  />
                 ))}
-              </tbody>
-            </table>
+                
+                {editableData.map((point, index) => {
+                  const shouldShowLabel = true;
+                  
+                  if (shouldShowLabel) {
+                    return (
+                      <text
+                        key={`label-${index}`}
+                        x={padding.left + (index / (editableData.length - 1)) * graphWidth}
+                        y={height - padding.bottom + 20}
+                        fontSize="11"
+                        fill="#6b7280"
+                        textAnchor="middle"
+                      >
+                        {point.period}
+                      </text>
+                    );
+                  }
+                  return null;
+                })}
+                
+                <text
+                  x={padding.left - 10}
+                  y={getY(max) + 4}
+                  fontSize="11"
+                  fill="#6b7280"
+                  textAnchor="end"
+                >
+                  {max}
+                </text>
+                
+                <text
+                  x={padding.left - 10}
+                  y={getY(min) + 4}
+                  fontSize="11"
+                  fill="#6b7280"
+                  textAnchor="end"
+                >
+                  {min}
+                </text>
+                
+                {/* Add Y-axis label */}
+                <text
+                  transform={`rotate(-90, ${padding.left - 35}, ${height/2})`}
+                  x={padding.left - 35}
+                  y={height/2}
+                  fontSize="12"
+                  fill="#6b7280"
+                  textAnchor="middle"
+                >
+                  Value
+                </text>
+                
+                {/* Add horizontal grid lines for better readability */}
+                {[0.25, 0.5, 0.75].map((ratio, idx) => {
+                  const value = min + range * ratio;
+                  return (
+                    <g key={`grid-${idx}`}>
+                      <line
+                        x1={padding.left - 2}
+                        y1={getY(value)}
+                        x2={chartWidth - padding.right}
+                        y2={getY(value)}
+                        stroke="#e5e7eb"
+                        strokeWidth="1"
+                        strokeDasharray="2,2"
+                      />
+                      <text
+                        x={padding.left - 10}
+                        y={getY(value) + 4}
+                        fontSize="11"
+                        fill="#6b7280"
+                        textAnchor="end"
+                      >
+                        {Math.round(value)}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="py-2 px-4 border-b text-left">Period</th>
+                    <th className="py-2 px-4 border-b text-right">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {editableData.map((dataPoint, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                      <td className="py-2 px-4 border-b">{dataPoint.period}</td>
+                      <td className="py-2 px-4 border-b text-right">
+                        <input
+                          type="number"
+                          value={dataPoint.value}
+                          onChange={(e) => handleValueChange(index, e.target.value)}
+                          className={`w-20 text-right font-medium p-1 border rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-500 ${
+                            modifiedIndices.includes(index) ? 'border-orange-500 text-orange-600' : 'border-gray-200'
+                          }`}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-          
-          <div className="mt-4 flex justify-between items-center">
-            <p className="text-sm text-gray-500">Click on values to edit. Modified points appear in orange.</p>
+        </div>
+        
+        {/* Fixed action bar */}
+        <div 
+          className="bg-white border-t border-gray-200 p-3 flex justify-between items-center shadow-lg"
+          style={{ height: `${actionBarHeight}px` }}
+        >
+          <p className="text-sm text-gray-500">
+            {hasChanges 
+              ? "Click on values to edit. Modified points appear in orange." 
+              : "Edit values to make changes."}
+          </p>
+          <div className="flex space-x-3">
             {hasChanges && (
               <button 
-                onClick={handleSaveChanges}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-md font-medium"
+                onClick={handleResetChanges}
+                className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-medium border border-gray-300"
               >
-                Save Data
+                Reset
               </button>
             )}
+            <button 
+              onClick={handleSaveChanges}
+              disabled={!hasChanges}
+              className={`px-6 py-2 rounded-md font-medium ${
+                hasChanges 
+                  ? "bg-orange-500 hover:bg-orange-600 text-white" 
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {hasChanges ? "Save Data" : "Edit to Save"}
+            </button>
           </div>
         </div>
       </div>
