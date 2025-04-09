@@ -9,6 +9,9 @@ const useTableState = () => {
   const [deepestLevelView, setDeepestLevelView] = useLocalStorage('compareTableDeepestLevelView', false);
   const [hoveredColumnGroup, setHoveredColumnGroup] = useLocalStorage('compareTableHoveredGroup', null);
   const [lastClickedCell, setLastClickedCell] = useLocalStorage('compareTableLastClickedCell', null);
+  const [chartDataVisible, setChartDataVisible] = useLocalStorage('compareTableChartDataVisible', false);
+  const [selectedChartData, setSelectedChartData] = useLocalStorage('compareTableSelectedChartData', null);
+  const [selectedChartTitle, setSelectedChartTitle] = useLocalStorage('compareTableSelectedChartTitle', null);
 
   const toggleFamilyExpansion = (familyKey) => {
     setExpandedFamily(expandedFamily === familyKey ? null : familyKey);
@@ -108,6 +111,16 @@ const useTableState = () => {
     setSelectedItem(null);
   };
 
+  const handleChartClick = (data, title) => {
+    setSelectedChartData(data);
+    setSelectedChartTitle(title);
+    setChartDataVisible(true);
+  };
+
+  const closeChartData = () => {
+    setChartDataVisible(false);
+  };
+
   return {
     // State
     expandedColumn,
@@ -118,6 +131,9 @@ const useTableState = () => {
     deepestLevelView,
     hoveredColumnGroup,
     lastClickedCell,
+    chartDataVisible,
+    selectedChartData,
+    selectedChartTitle,
 
     // Setters
     setExpandedColumn,
@@ -128,6 +144,9 @@ const useTableState = () => {
     setDeepestLevelView,
     setHoveredColumnGroup,
     setLastClickedCell,
+    setChartDataVisible,
+    setSelectedChartData,
+    setSelectedChartTitle,
 
     // Actions
     toggleFamilyExpansion,
@@ -138,7 +157,9 @@ const useTableState = () => {
     handleItemSelectInDetailView,
     handleFamilyClickInDetailView,
     handleSpeciesClickInDetailView,
-    closeDetailView
+    closeDetailView,
+    handleChartClick,
+    closeChartData
   };
 };
 

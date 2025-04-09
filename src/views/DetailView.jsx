@@ -4,7 +4,7 @@ import NumberBar from '../components/NumberBar';
 import { getItemAttributes, getPrimaryMetric } from '../data/dataUtils';
 import { getRowHeaderBgClass } from '../utils/styleUtils';
 import { getAbbreviatedMetricName } from '../utils/styleUtils';
-import { hierarchyData, organizationData, activityData } from '../data/mockData';
+import { hierarchyData, organizationData } from '../data/mockData';
 
 const DetailView = ({
   selectedItem,
@@ -15,7 +15,9 @@ const DetailView = ({
   handleItemSelectInDetailView,
   closeDetailView,
   expandedColumn,
-  mainCategories
+  mainCategories,
+  handleChartClick,
+  activityData
 }) => {
   const columnCount = expandedColumn 
     ? mainCategories[expandedColumn].subcategories.length 
@@ -133,6 +135,7 @@ const DetailView = ({
                           title={activityData[attr].title} 
                           width={280}
                           height={150}
+                          onChartClick={handleChartClick}
                         />
                       )}
                     </div>
@@ -147,6 +150,7 @@ const DetailView = ({
         <p>Click a different organization to view its activities.</p>
         <p>Click a category name to return to table view with that category expanded.</p>
         <p>Click "Back to Table" to return to the full table view.</p>
+        <p>Click on any chart to view detailed data. You can edit and save chart data.</p>
       </div>
     </>
   );
