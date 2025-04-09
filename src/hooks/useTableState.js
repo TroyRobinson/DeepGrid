@@ -14,16 +14,25 @@ const useTableState = () => {
   const [selectedChartTitle, setSelectedChartTitle] = useLocalStorage('compareTableSelectedChartTitle', null);
 
   const toggleFamilyExpansion = (familyKey) => {
-    setExpandedFamily(expandedFamily === familyKey ? null : familyKey);
-    if (expandedFamily !== familyKey) {
+    if (expandedFamily === familyKey) {
+      setExpandedFamily(null);
+      setExpandedSpecies(null);
+      setDeepestLevelView(false);
+    } else {
+      setExpandedFamily(familyKey);
       setExpandedSpecies(null);
       setDeepestLevelView(false);
     }
   };
 
   const toggleSpeciesExpansion = (speciesKey) => {
-    setExpandedSpecies(expandedSpecies === speciesKey ? null : speciesKey);
-    setDeepestLevelView(expandedSpecies !== speciesKey);
+    if (expandedSpecies === speciesKey) {
+      setExpandedSpecies(null);
+      setDeepestLevelView(false);
+    } else {
+      setExpandedSpecies(speciesKey);
+      setDeepestLevelView(true);
+    }
   };
 
   const toggleColumnExpansion = (columnKey, event) => {
@@ -98,17 +107,20 @@ const useTableState = () => {
     setDetailViewActive(false);
     setExpandedFamily(familyKey);
     setExpandedSpecies(null);
+    setDeepestLevelView(false);
   };
 
   const handleSpeciesClickInDetailView = (familyKey, speciesKey) => {
     setDetailViewActive(false);
     setExpandedFamily(familyKey);
     setExpandedSpecies(speciesKey);
+    setDeepestLevelView(true);
   };
 
   const closeDetailView = () => {
     setDetailViewActive(false);
     setSelectedItem(null);
+    setDeepestLevelView(false);
   };
 
   const handleChartClick = (data, title) => {
