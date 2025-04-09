@@ -267,5 +267,158 @@ export const activityData = {
     ],
     title: 'Families Served (6 months)'
   },
-  // ... [rest of activity data]
+  'Small Business Loans': {
+    data: [
+      { period: 'Jan', value: 15 },
+      { period: 'Feb', value: 18 },
+      { period: 'Mar', value: 22 },
+      { period: 'Apr', value: 12 },
+      { period: 'May', value: 16 },
+      { period: 'Jun', value: 25 }
+    ],
+    title: 'Loans Issued (6 months)'
+  },
+  'Entrepreneur Mentoring': {
+    data: [
+      { period: 'Jan', value: 25 },
+      { period: 'Feb', value: 32 },
+      { period: 'Mar', value: 30 },
+      { period: 'Apr', value: 35 },
+      { period: 'May', value: 28 },
+      { period: 'Jun', value: 42 }
+    ],
+    title: 'Sessions (6 months)'
+  },
+  'Job Training Programs': {
+    data: [
+      { period: 'Jan', value: 42 },
+      { period: 'Feb', value: 45 },
+      { period: 'Mar', value: 40 },
+      { period: 'Apr', value: 38 },
+      { period: 'May', value: 55 },
+      { period: 'Jun', value: 60 }
+    ],
+    title: 'Trainees (6 months)'
+  },
+  'Resume Workshops': {
+    data: [
+      { period: 'Jan', value: 30 },
+      { period: 'Feb', value: 35 },
+      { period: 'Mar', value: 32 },
+      { period: 'Apr', value: 28 },
+      { period: 'May', value: 22 },
+      { period: 'Jun', value: 30 }
+    ],
+    title: 'Attendees (6 months)'
+  },
+  'Vocational Rehabilitation': {
+    data: [
+      { period: 'Jan', value: 15 },
+      { period: 'Feb', value: 18 },
+      { period: 'Mar', value: 25 },
+      { period: 'Apr', value: 32 },
+      { period: 'May', value: 28 },
+      { period: 'Jun', value: 24 }
+    ],
+    title: 'Clients (6 months)'
+  },
+  'Retail Job Placement': {
+    data: [
+      { period: 'Jan', value: 22 },
+      { period: 'Feb', value: 25 },
+      { period: 'Mar', value: 35 },
+      { period: 'Apr', value: 32 },
+      { period: 'May', value: 40 },
+      { period: 'Jun', value: 36 }
+    ],
+    title: 'Placements (6 months)'
+  },
+  'Prenatal Care Coordination': {
+    data: [
+      { period: 'Jan', value: 28 },
+      { period: 'Feb', value: 32 },
+      { period: 'Mar', value: 35 },
+      { period: 'Apr', value: 38 },
+      { period: 'May', value: 34 },
+      { period: 'Jun', value: 42 }
+    ],
+    title: 'Mothers Served (6 months)'
+  },
+  'Home Visitation Programs': {
+    data: [
+      { period: 'Jan', value: 45 },
+      { period: 'Feb', value: 48 },
+      { period: 'Mar', value: 42 },
+      { period: 'Apr', value: 50 },
+      { period: 'May', value: 55 },
+      { period: 'Jun', value: 62 }
+    ],
+    title: 'Visits (6 months)'
+  },
+  'NICU Family Support': {
+    data: [
+      { period: 'Jan', value: 18 },
+      { period: 'Feb', value: 22 },
+      { period: 'Mar', value: 20 },
+      { period: 'Apr', value: 15 },
+      { period: 'May', value: 28 },
+      { period: 'Jun', value: 35 }
+    ],
+    title: 'Families Served (6 months)'
+  },
+  'Maternal Health Research': {
+    data: [
+      { period: 'Jan', value: 8 },
+      { period: 'Feb', value: 6 },
+      { period: 'Mar', value: 12 },
+      { period: 'Apr', value: 14 },
+      { period: 'May', value: 12 },
+      { period: 'Jun', value: 18 }
+    ],
+    title: 'Studies (6 months)'
+  },
+  'Free Medical Clinics': {
+    data: [
+      { period: 'Jan', value: 85 },
+      { period: 'Feb', value: 92 },
+      { period: 'Mar', value: 78 },
+      { period: 'Apr', value: 85 },
+      { period: 'May', value: 102 },
+      { period: 'Jun', value: 110 }
+    ],
+    title: 'Patients (6 months)'
+  },
+  'Preventative Care Programs': {
+    data: [
+      { period: 'Jan', value: 62 },
+      { period: 'Feb', value: 58 },
+      { period: 'Mar', value: 65 },
+      { period: 'Apr', value: 72 },
+      { period: 'May', value: 68 },
+      { period: 'Jun', value: 75 }
+    ],
+    title: 'Screenings (6 months)'
+  },
+  'Sliding Fee Scale Services': {
+    data: [
+      { period: 'Jan', value: 110 },
+      { period: 'Feb', value: 105 },
+      { period: 'Mar', value: 120 },
+      { period: 'Apr', value: 125 },
+      { period: 'May', value: 118 },
+      { period: 'Jun', value: 140 }
+    ],
+    title: 'Patients (6 months)'
+  },
+  'Integrated Behavioral Health': {
+    data: [
+      { period: 'Jan', value: 35 },
+      { period: 'Feb', value: 38 },
+      { period: 'Mar', value: 45 },
+      { period: 'Apr', value: 40 },
+      { period: 'May', value: 35 },
+      { period: 'Jun', value: 52 }
+    ],
+    title: 'Sessions (6 months)'
+  }
 }; 
