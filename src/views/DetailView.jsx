@@ -19,9 +19,9 @@ const DetailView = ({
   handleChartClick,
   activityData
 }) => {
-  const columnCount = expandedColumn 
+  const columnCount = expandedColumn && mainCategories && mainCategories[expandedColumn]?.subcategories
     ? mainCategories[expandedColumn].subcategories.length 
-    : Object.keys(mainCategories).length;
+    : Object.keys(mainCategories || {}).length;
   
   const attributes = getItemAttributes(selectedItem);
   const orgMetrics = selectedItem ? organizationData[selectedItem] : null;
