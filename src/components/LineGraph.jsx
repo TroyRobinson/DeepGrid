@@ -10,7 +10,8 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
   const max = Math.max(...values);
   const range = max - min || 1;
   
-  const graphPadding = { top: 15, right: 12, bottom: 25, left: 25 };
+  // Adjust padding for smaller screens
+  const graphPadding = { top: 15, right: 8, bottom: 25, left: 22 };
   const graphHeight = height - graphPadding.top - graphPadding.bottom;
   const graphWidth = width - graphPadding.left - graphPadding.right;
   
@@ -39,10 +40,10 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
   };
   
   return (
-    <div className="mt-3 mb-4">
-      <div className="text-xs text-gray-500 mb-2 text-center">{title}</div>
+    <div className="mt-2 mb-3">
+      <div className="text-xs text-gray-500 mb-1 text-center">{title}</div>
       <div 
-        className="relative"
+        className="relative w-full flex justify-center"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -84,7 +85,7 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
           <polyline
             fill="none"
             stroke="#3B82F6"
-            strokeWidth="2.5"
+            strokeWidth="2"
             points={points}
           />
           
@@ -93,7 +94,7 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
               key={`point-${index}`}
               cx={graphPadding.left + (index / (data.length - 1)) * graphWidth}
               cy={getY(point.value)}
-              r="3"
+              r="2.5"
               fill="#3B82F6"
               stroke="#fff"
               strokeWidth="1"
@@ -101,10 +102,9 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
           ))}
           
           {data.map((point, index) => {
-            const shouldShowLabel = data.length <= 4 || 
+            const shouldShowLabel = data.length <= 3 || 
                               index === 0 || 
-                              index === data.length - 1 || 
-                              index === Math.floor(data.length / 2);
+                              index === data.length - 1;
             
             if (shouldShowLabel) {
               return (
@@ -112,7 +112,7 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
                   key={`label-${index}`}
                   x={graphPadding.left + (index / (data.length - 1)) * graphWidth}
                   y={height - graphPadding.bottom + 15}
-                  fontSize="9"
+                  fontSize="8"
                   fill="#6b7280"
                   textAnchor="middle"
                 >
@@ -126,7 +126,7 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
           <text
             x={graphPadding.left - 5}
             y={getY(max) + 4}
-            fontSize="9"
+            fontSize="8"
             fill="#6b7280"
             textAnchor="end"
           >
@@ -136,7 +136,7 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
           <text
             x={graphPadding.left - 5}
             y={getY(min) + 4}
-            fontSize="9"
+            fontSize="8"
             fill="#6b7280"
             textAnchor="end"
           >
@@ -150,10 +150,10 @@ const LineGraph = ({ data, title, height = 50, width = 150, onChartClick }) => {
             className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-md transition-opacity duration-200 cursor-pointer"
             onClick={handleClick}
           >
-            <div className="bg-orange-500 text-white font-medium px-3 py-1.5 rounded flex items-center">
+            <div className="bg-orange-500 text-white font-medium px-2 py-1 rounded flex items-center text-xs sm:text-sm">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4 mr-1.5" 
+                className="h-3 w-3 mr-1" 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
